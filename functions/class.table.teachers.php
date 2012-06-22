@@ -19,8 +19,6 @@ class TableTeachers extends Table
 			$this->table_content[$i][1] = $this->col_params[$i]->wp_user;
 			$this->table_content[$i][2] = $this->col_params[$i]->subjects;
 		}
-
-
 	}
 
 	public function update() {
