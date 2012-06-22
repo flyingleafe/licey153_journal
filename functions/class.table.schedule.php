@@ -27,6 +27,7 @@ class TableSchedule extends Table
 		$this->show_class = "licey_schedule_table";
 		$this->edit_class = "licey_edit_schedule_table";
 		$this->labels = array('corner' => '&nbsp;', 'submit' => 'Сохранить');
+		$this->labels['access_denied'] = 'Вы не можете просматривать расписание. Зайдите как учитель или ученик.';
 		$this->complete = true;
 	}
 
@@ -43,10 +44,21 @@ class TableSchedule extends Table
 	protected function content_filter($form, $day, $schedule)
 	{
 		$input = "<table>";
-		foreach ($schedule as $subject)
-			$input.= "<tr><td>" . licey_subject_translate($subject) . "</td></tr>";
+		$i = 1;
+		foreach ($schedule as $subject) {
+			$input.= "<tr>";
+			if($i % 2) $input.= "<td rowspan=2>" . floor($i/2 + 1) . " пара</td>";
+			$input.= "<td>" . licey_subject_translate($subject) . "</td></tr>";
+			$i++;
+		}
 		$input.= "</table>";
 		return $input;
+	}
+
+	protected function view_access_given() {
+		$current_user = wp_get_current_user();
+
+		if(is_admin() || $current_user->has_cap('edit_dashboard') || get_current_student() || get_current_teacher() ) return true;
 	}
 
 	protected function content_edit_filter($form, $day, $schedule)

@@ -53,14 +53,49 @@ function licey_journal_options()
 		$c++;
 	}
 	
-	echo "<input type='submit' name='canicular_dates_btn' value='Сохранить'></form>";
+	echo "<input type='submit' name='canicular_dates_btn' value='Сохранить' class='button-primary'></form>";
 	
 	echo "<h2>Настройки отображения.</h2><form name='edit_strings' method='post' action='".$_SERVER['PHP_SELF']."?page=main-options&amp;updated=true'>";
 	if(function_exists('wp_nonce_field')) wp_nonce_field('edit_strings');
 	
 	echo "Ключ для отображения журнала по предметам и классам: <input type='text' name='edit_subj-form_hook' value='".get_option('licey_subj-form_replace_string')."'><br>";
 	echo "Ключ для отображения оценок отдельного ученика: <input type='text' name='edit_singlestud_hook' value='".get_option('licey_single-stud_replace_string')."'><br>";
-	echo "<input type='submit' name='edit_strings_btn' value='Сохранить'></form>";
+	echo "<input type='submit' name='edit_strings_btn' value='Сохранить' class='button-primary'></form>";
+
+	$pages = get_pages();
+	?>
+	<h2>Страницы журнала</h2>
+	<form name="pages_options" method="post" action="">
+		<p>
+			<label for="singlestud_page_option">Страница просмотра журнала по ученику:</label>
+			<select id="singlestud_page_option" name="licey_journal_student_url">
+				<?php foreach($pages as $page) : 
+				$selected = ($page->guid === get_option('licey_journal_student_url')) ? ' selected' : ''; ?>
+					<option value='<?php echo $page->guid; ?>'<?php echo $selected; ?>><?php echo $page->post_title; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</p>
+		<p>
+			<label for="subjform_page_option">Страница просмотра журнала по классам:</label>
+			<select id="subjform_page_option" name="licey_journal_forms_url">
+				<?php foreach($pages as $page) : 
+				$selected = ($page->guid === get_option('licey_journal_forms_url')) ? ' selected' : ''; ?>
+					<option value='<?php echo $page->guid; ?>'<?php echo $selected; ?>><?php echo $page->post_title; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</p>
+		<p>
+			<label for="schedule_page_option">Страница расписания:</label>
+			<select id="schedule_page_option" name="licey_schedule_url">
+				<?php foreach($pages as $page) :
+				$selected = ($page->guid === get_option('licey_schedule_url')) ? ' selected' : ''; ?>
+					<option value='<?php echo $page->guid; ?>'<?php echo $selected; ?>><?php echo $page->post_title; ?></option>
+				<?php endforeach; ?>
+			</select>
+		</p>
+		<input type="submit" name="pages_options_submit" value="Сохранить" class="button-primary">
+	</form>
+	<?php
 }
 
 function licey_edit_forms()

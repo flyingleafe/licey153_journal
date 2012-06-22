@@ -78,6 +78,12 @@ function show_singlestudent_marks( $settings )
 	return "<h1>" . $cur_student->fio . "</h1>" . $table->show(true);
 }
 
+function show_schedule( $attr )
+{
+	$table = new TableSchedule;
+	return $table->show(true);
+}
+
 /**
  * Функция инициализации шорткода
  * Создает шорткод, который выводит таблицу с оценками с заданными параметрами
@@ -111,6 +117,7 @@ function licey_admin_styles_and_js()
 register_activation_hook(__FILE__, 'journal_install');
 add_shortcode('singlestudent', 'show_singlestudent_marks');
 add_shortcode('subj-form', 'show_subjform_marks');
+add_shortcode('licey_schedule', 'show_schedule');
 add_action('wp_head', 'licey_styles');
 add_action('admin_head', 'licey_admin_styles_and_js');
 add_action('admin_menu', 'journal_admin_page');

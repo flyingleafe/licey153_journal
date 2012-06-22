@@ -198,6 +198,7 @@ function licey_update()
 		$report = $student->report;
 	}
 
+	//обновление ученика
 	if(isset($_POST['student_update'])) {
 		$student = new Student( $_POST['student-edit']);
 		$student->update( array(
@@ -238,6 +239,13 @@ function licey_update()
 		
 		update_option('licey_single-stud_replace_string', $singlestud);
 		update_option('licey_subj-form_replace_string', $subjform);
+	}
+
+	if(isset($_POST['pages_options_submit']))
+	{
+		update_option('licey_journal_student_url', $_POST['licey_journal_student_url']);
+		update_option('licey_journal_forms_url', $_POST['licey_journal_forms_url']);
+		update_option('licey_schedule_url', $_POST['licey_schedule_url']);
 	}
 
 	if(isset($_POST['table_update_btn']))
@@ -356,6 +364,17 @@ function get_current_student() {
 	if(!$current_user->ID) return false;
 
 	$student = new Student( $current_user->user_login, true);
+	if(!$student->id) return false;
+
+	return $student;
+}
+
+function get_current_teacher() {
+	$current_user = wp_get_current_user();
+
+	if(!$current_user->ID) return false;
+
+	$teacher = new Teacher( $current_user->user_login, true);
 	if(!$student->id) return false;
 
 	return $student;

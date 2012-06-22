@@ -23,7 +23,7 @@ class Teacher
 	//Оповещение о состоянии
 	public $report;
 
-	public function __construct($handle='')
+	public function __construct($handle='', $wp_user = false)
 	{
 		global $wpdb, $table_teachers;
 		$current_user = wp_get_current_user();
@@ -31,7 +31,10 @@ class Teacher
 		if($handle) {
 			//определяем параметр запроса
 			if( is_numeric($handle) ) $way = 'id';
-			else $way = 'username';
+			else {
+				if(!$wp_user) $way = 'username';
+				else $way = 'wp_user';
+			}
 
 			//делаем запрос к БД
 			$data = $wpdb->get_row("SELECT * FROM `".$table_teachers."` WHERE `".$way."`='".$handle."';");

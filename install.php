@@ -33,39 +33,44 @@ add_option('licey_canicular_dates', json_encode( array(
 add_option('licey_single-stud_replace_string', '[singlestudent]', '', 'yes');
 add_option('licey_subj-form_replace_string', '[subj-form]', '', 'yes');
 
-$the_page_title = "Журнал ученика";
+// Create post object
+$_p = array();
+$_p['post_title'] = '';
+$_p['post_content'] = "[singlestudent]";
+$_p['post_status'] = 'publish';
+$_p['post_type'] = 'page';
+$_p['comment_status'] = 'closed';
+$_p['ping_status'] = 'closed';
+$_p['post_category'] = array(1); // the default 'Uncatrgorised'
 
-$the_page = get_page_by_title( $the_page_title );
+$the_page_titles = array("Журнал ученика", "Журнал по классам", "Расписание");
+$the_pages = array();
 
-if ( !$the_page ) {
+for($i=0; $i<3; $i++) {
+	$the_pages[$i] = get_page_by_title( $the_page_titles[$i] );
 
-    // Create post object
-    $_p = array();
-    $_p['post_title'] = $the_page_title;
-    $_p['post_content'] = "[singlestudent]";
-    $_p['post_status'] = 'publish';
-    $_p['post_type'] = 'page';
-    $_p['comment_status'] = 'closed';
-    $_p['ping_status'] = 'closed';
-    $_p['post_category'] = array(1); // the default 'Uncatrgorised'
+	if ( !$the_pages[$i] ) {
 
-    // Insert the post into the database
-    $the_page_id = wp_insert_post( $_p );
+		$_p['post_title'] = $the_page_titles[$i];
+	    // Insert the post into the database
+	    $the_page_id = wp_insert_post( $_p );
 
-    $the_page = get_post( $the_page_id );
+	    $the_pages[$i] = get_post( $the_page_id );
 
-} else {
-    // the plugin may have been previously active and the page may just be trashed...
+	} else {
+	    // the plugin may have been previously active and the page may just be trashed...
 
-    $the_page_id = $the_page->ID;
+	    $the_page_id = $the_page->ID;
 
-    //make sure the page is not trashed...
-    $the_page->post_status = 'publish';
-    $the_page_id = wp_update_post( $the_page );
-
+	    //make sure the page is not trashed...
+	    $the_pages[$i]->post_status = 'publish';
+	    $the_page_id = wp_update_post( $the_pages[$i] );
+	}
 }
 //записываем путь к странице журнала в настройку
-add_option('licey_journal_student_url', $the_page->guid);
+add_option('licey_journal_student_url', $the_pages[0]->guid);
+add_option('licey_journal_forms_url', $the_pages[1]->guid);
+add_option('licey_schedule_url', $the_pages[2]->guid);
 
 /****создаем таблицы****/
 
