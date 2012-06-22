@@ -1,0 +1,20 @@
+/*
+	Стили для таблицы оценок ученика.
+	Делают чтоб было красяво и удобно.
+	Как-то так.
+*/
+
+table.marks_table {
+	background-color: #f0f0f0;
+	border-right: 1px solid #7c7c7c;
+	border-bottom: 1px solid #7c7c7c;
+}
+
+td.marks_table {
+	border-left: 1px solid #7c7c7c;
+	border-top: 1px solid #7c7c7c;
+	text-align: center;
+}
+.firstrow {
+	text-align: left;
+}

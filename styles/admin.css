@@ -1,0 +1,159 @@
+table.admin_table {
+	border: 1px solid #7c7c7c;
+	padding: 0px;
+}
+
+td.admin_table {
+	border: 1px solid #7c7c7c;
+	margin: 0px;
+}
+
+div#updated {
+	height: 35px;
+	width: 98%;
+	position: relative; left: 14px;
+	background-color: #c8e3ff;
+	border: 1px solid #8199b1;
+	border-radius:3px;
+	-webkit-border-radius:3px;
+	-moz-border-radius:3px; 
+	-khtml-border-radius:3px;
+}
+span#updated {
+	font-weight: bold;
+	position:relative;
+	top: 25%;
+}
+
+.classlist {
+	vertical-align: top;
+	width: 350px;
+}
+
+.licey-markinput-field {
+	font-size: 17px;
+}
+
+.licey-student-list-item {
+	background-color: #fff;
+	padding-bottom: 10px;
+}
+
+.edit-marks-table {
+	font-size: 17px;
+}
+
+.licey-student-list-item input {
+	float: right;
+	display: none;
+}
+
+/* <Таблица оценок> */
+
+.licey_show_marks_table, .licey_edit_marks_table {
+	border-collapse: collapse;
+	font-size: 17px;
+}
+
+.licey_show_marks_table span, .licey_edit_marks_table span {
+	font-weight: bold;
+}
+
+.licey_show_marks_table td {
+	border: 1px solid black;
+	padding: 5px;
+	min-width: 25px;
+}
+
+.licey_edit_marks_table td:nth-of-type(n+1) {
+	position: relative;
+	width: 60px;
+}
+
+.licey_edit_marks_table td:nth-of-type(1) {
+	width: auto;
+}
+
+.licey_edit_marks_table input {
+	width: 100%;
+}
+
+/* </Таблица оценок> */
+
+/*<Таблица классов>*/
+.licey_edit_sched_table {
+	font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.licey_edit_sched_table h1 {
+	display: inline;
+}
+
+.licey_edit_sched_table form {
+	float: right;
+}
+
+.licey_sched_table div, .licey_edit_sched_table div {
+	position: relative;
+	width: 340px;
+	border-left: 4px solid #013b75;
+	padding: 5px 5px 5px 25px;
+    min-height: 250px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
+    zoom: 1;
+    *display: inline;
+    _height: 250px;
+}
+
+.licey_edit_sched_table div.hover {
+	background: #eee;
+}
+
+.licey_sched_table li, .licey_edit_sched_table li {
+	padding: 5px 0 5px 0;
+}
+
+.licey_edit_sched_table input[type="checkbox"] {
+	position: absolute;
+	left: 3px;
+	display: inline;
+}
+
+.js .licey_edit_sched_table input[type="checkbox"],
+.js .licey_edit_sched_table form {
+	display: none;
+}
+
+.licey_edit_sched_table li {
+	position: relative;
+	padding-left: 23px;
+}
+
+.licey_edit_sched_table li form {
+	margin-top: -5px;
+}
+
+.licey_edit_sched_table li.hover {
+	background-color: #abc;
+}
+
+
+/*</Таблица классов>*/
+
+/*<Редактирование ученика>*/
+.licey_student_edit {
+	float: left;
+	padding: 10px;
+}
+
+.js .licey_student_edit div.edit_marks {
+	display: none;
+}
+
+.licey_student_edit h2.edit_marks span {
+	color: gray;
+	font-weight: normal;
+}
