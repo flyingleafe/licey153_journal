@@ -110,7 +110,27 @@ function licey_edit_forms()
 
 function licey_edit_teachers()
 {
+	licey_update();
+
 	echo "right here... right now...";
+	?>
+	<h1>Учительский состав</h1>
+	<h2>Добавить учителя</h2>
+	<form name="add_teacher" method="post" action='<?php echo licey_cur_uri() . 'updated=true'; ?>'>
+		<p>
+			<label for="teacher-fio">ФИО:</label>
+			<input type="text" id="teacher-fio" name="add_teacher-fio">
+		</p>
+		<p>
+			<label for="teacher-username">Имя пользователя:</label>
+			<input type="text" id="teacher-username" name="add_teacher-username">
+		</p>
+		<input type="submit" name="add_teacher-submit" value='Добавить' class="button-primary">
+	</form>
+
+	<?php
+	$table = new TableTeachers();
+	$table->show_edit();
 }
 
 function licey_test()
@@ -119,7 +139,7 @@ function licey_test()
 
 	echo "right here... right now...";
 
-	$table = new TableMarks();
+	$table = new TableTeachers();
 	$table->show();
 }
 ?>

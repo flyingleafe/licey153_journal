@@ -82,7 +82,7 @@ class Teacher
 	{
 		if(!$subjects) return false;
 
-		if(!in_array('formmaster', $subjects) ) $subjects += array('formmaster');
+		if(!in_array('formmaster', $subjects) ) $subjects = array_merge($subjects, array('formmaster') );
 
 		global $wpdb, $table_teachers, $table_subjects;
 
@@ -90,7 +90,7 @@ class Teacher
 
 		foreach ($this->subjects as $subject) {
 			if(!in_array($subject, $subjects)) {
-				$wpdb->update($table_teachers, array( $subject => NULL ), array( $subject => $this->username ), array('%s'), array('%d') );
+				$wpdb->update($table_subjects, array( $subject => NULL ), array( $subject => $this->username ), array('%s'), array('%d') );
 			}
 		}
 
@@ -125,7 +125,7 @@ class Teacher
 		}
 	}
 
-	public function add_new($username, $fio, $subjects)
+	public function add_new($username, $fio, $subjects = array() )
 	{
 		global $wpdb, $table_teachers, $table_subjects;
 		
@@ -138,10 +138,10 @@ class Teacher
 				throw new Exception('Учитель с таким именем пользователя уже существует!');
 			}
 
-			if(!in_array('formmaster', $subjects) ) $subjects += array('formmaster');
+			if(!in_array('formmaster', $subjects) ) $subjects = array_merge($subjects, array('formmaster') );
 
 			//все ок - добавляем
-			$wpdb->insert($table_students, array('username' => $username, 'fio' => $fio, 'subjects' => json_encode($subjects) ), array('%s','%s','%s'));
+			$wpdb->insert($table_teachers, array('username' => $username, 'fio' => $fio, 'subjects' => json_encode($subjects) ), array('%s','%s','%s') );
 			
 			//применяем только что полученные настройки к данному обьекту
 			$this->id = $wpdb->insert_id;
@@ -149,7 +149,9 @@ class Teacher
 			$this->fio = $fio;
 			$this->subjects = $subjects;
 			
-			$this->report = "Новый ученик уcпешно добавлен";
+			$this->report = "Новый учитель уcпешно добавлен";
+
+			var_dump($this);
 			
 		} catch( Exception $e ) {
 			//ловим исключение, выводим ошибку

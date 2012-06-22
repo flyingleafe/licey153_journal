@@ -55,7 +55,7 @@ class TableSchedule extends Table
 		return $input;
 	}
 
-	protected function view_access_given() {
+	public function view_access_given() {
 		$current_user = wp_get_current_user();
 
 		if(is_admin() || $current_user->has_cap('edit_dashboard') || get_current_student() || get_current_teacher() ) return true;

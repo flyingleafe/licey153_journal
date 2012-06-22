@@ -15,9 +15,6 @@ abstract class Table
 
 	//дополнительные параметры, кот. необходимо передать
 	protected $settings;
-
-	//имя POST-массива для передачи данных
-	protected $postname;
 	
 	//некоторое текстовое наполнение
 	protected $labels = array();
@@ -31,7 +28,11 @@ abstract class Table
 	public $report;
 
 	abstract public function __construct($settings);
-	abstract public function choose_settings();
+	public function choose_settings() {}
+
+	public function view_access_given() {
+		return true;
+	}
 	
 	protected function row_view($row_param) {
 		return $row_param;
@@ -96,6 +97,11 @@ abstract class Table
 
 		//готова ли таблица?
 		if($this->complete) {
+			if(!$this->view_access_given()) {
+				echo $this->labels['access_denied'];
+				return false;
+			}
+
 			$presentation.= $this->getHeader();
 
 			$presentation.= "<table class='" . $this->edit_class . "'>";
@@ -145,14 +151,17 @@ abstract class Table
 	public function getFooter()
 	{
 		$btn = "
-			<input class='" . $this->submit_btn_class . "' type='submit' value='" . $this->labels['submit'] . "'' name='table_update_btn'>
+			<input class='button-primary " . $this->submit_btn_class . "' type='submit' value='" . $this->labels['submit'] . "'' name='table_update_btn'>
 			</form>
 		";
 		return $btn;
 	}
 }
 
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'class.table.marks.php');
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'class.table.schedule.php');
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'class.table.students.php');
+
+$path = WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__));
+require_once($path.'class.table.marks.php');
+require_once($path.'class.table.schedule.php');
+require_once($path.'class.table.students.php');
+require_once($path.'class.table.teachers.php');
 ?>

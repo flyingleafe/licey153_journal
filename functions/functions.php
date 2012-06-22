@@ -248,6 +248,13 @@ function licey_update()
 		update_option('licey_schedule_url', $_POST['licey_schedule_url']);
 	}
 
+	if(isset($_POST['add_teacher-submit']))
+	{
+		$teacher = new Teacher;
+		$teacher->add_new($_POST['add_teacher-username'], $_POST['add_teacher-fio']);
+		$report = $teacher->report;
+	}
+
 	if(isset($_POST['table_update_btn']))
 	{
 		$class = $_POST['table_classname'];
@@ -338,7 +345,7 @@ function licey_getStudyDates($params)
 }
 
 
-function licey_pack(Array $data)
+function licey_pack($data)
 {
 	return urlencode(json_encode($data));
 }
