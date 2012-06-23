@@ -111,8 +111,7 @@ function licey_edit_forms()
 function licey_edit_teachers()
 {
 	licey_update();
-
-	echo "right here... right now...";
+	
 	?>
 	<h1>Учительский состав</h1>
 	<h2>Добавить учителя</h2>
@@ -127,9 +126,14 @@ function licey_edit_teachers()
 		</p>
 		<input type="submit" name="add_teacher-submit" value='Добавить' class="button-primary">
 	</form>
-
+	<h2>Список учителей</h2>
 	<?php
 	$table = new TableTeachers();
+	$table->show_edit();
+	?>
+	<h2>Распределение учителей по предметам</h2>
+	<?php
+	$table = new TableSubjects();
 	$table->show_edit();
 }
 
@@ -139,7 +143,8 @@ function licey_test()
 
 	echo "right here... right now...";
 
-	$table = new TableTeachers();
+	$table = new TableSubjects();
 	$table->show();
+	$table->show_edit();
 }
 ?>

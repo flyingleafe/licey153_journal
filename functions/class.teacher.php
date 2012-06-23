@@ -1,6 +1,6 @@
 <?php
 /**
- * Класс чителя
+ * Класс учителя
  * @package Classes
  */
 class Teacher
@@ -130,8 +130,8 @@ class Teacher
 		global $wpdb, $table_teachers, $table_subjects;
 		
 		try {
-			//проверям на наличие ученика с таким логином
-			$exist_teacher = $wpdb->get_results("SELECT username FROM `" . $table_teachers . "` WHERE username='" . $username . "';");
+			//проверям на наличие учителя с таким логином
+			$exist_teachers = $wpdb->get_results("SELECT username FROM `" . $table_teachers . "` WHERE username='" . $username . "';");
 			
 			//если есть, бросаем исключение
 			if($exist_teachers) {
@@ -150,8 +150,6 @@ class Teacher
 			$this->subjects = $subjects;
 			
 			$this->report = "Новый учитель уcпешно добавлен";
-
-			var_dump($this);
 			
 		} catch( Exception $e ) {
 			//ловим исключение, выводим ошибку
@@ -168,7 +166,7 @@ class Teacher
 
 		$data = array();
 
-		foreach(get_subjects_list() as $subject) {
+		foreach($this->subjects as $subject) {
 			$forms = $wpdb->get_col("SELECT * FROM `$table_subjects` WHERE `$subject`=`$this->username`;", 1);
 			if($forms) $data[$subject] = $forms;
 		}

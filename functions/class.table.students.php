@@ -6,8 +6,7 @@ class TableStudents extends Table
 		global $wpdb, $table_schedule;
 		$this->settings = $settings;
 
-		$forms = $wpdb->get_col("SELECT form FROM `" . $table_schedule . "`;");
-		usort($forms, 'licey_sort_forms');
+		$forms = get_forms_list();
 
 		for($i = 0; $i<count($forms); $i++) {
 			$this->row_params[$i] = new Form($forms[$i]);

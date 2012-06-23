@@ -34,6 +34,10 @@ abstract class Table
 		return true;
 	}
 	
+	public function edit_access_given() {
+		return true;
+	}
+
 	protected function row_view($row_param) {
 		return $row_param;
 	}
@@ -164,4 +168,5 @@ require_once($path.'class.table.marks.php');
 require_once($path.'class.table.schedule.php');
 require_once($path.'class.table.students.php');
 require_once($path.'class.table.teachers.php');
+require_once($path.'class.table.subjects.php');
 ?>

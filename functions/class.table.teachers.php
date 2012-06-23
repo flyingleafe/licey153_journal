@@ -14,17 +14,17 @@ class TableTeachers extends Table
 	public function __construct() {
 		global $wpdb, $table_teachers;
 
-		$this->row_params = array('Имя пользователя', 'Привязанный пользователь WP', 'Предметы');
+		$this->row_params = array('Полное имя', 'Имя пользователя', 'Привязанный пользователь WP', 'Предметы', 'Удалить');
 
-		$teachers_ids = $wpdb->get_col("SELECT id FROM $table_teachers;");
-		for ($i=0; $i<count($teachers_ids); $i++) {
-			$this->col_params[$i] = new Teacher($teachers_ids[$i]);
-			$this->table_content[$i][0] = $this->col_params[$i]->username;
-			$this->table_content[$i][1] = $this->col_params[$i]->wp_user;
-			$this->table_content[$i][2] = $this->col_params[$i]->subjects;
+		$this->col_params = get_teachers();
+		for ($i=0; $i<count($this->col_params); $i++) {
+			$this->table_content[$i][0] = $this->col_params[$i]->fio;
+			$this->table_content[$i][1] = $this->col_params[$i]->username;
+			$this->table_content[$i][2] = $this->col_params[$i]->wp_user;
+			$this->table_content[$i][3] = $this->col_params[$i]->subjects;
 		}
 
-		$this->labels['corner'] = 'Имя:';
+		$this->labels['corner'] = 'Имя';
 		$this->labels['submit'] = 'Сохранить';
 		$this->labels['access_denied'] = 'Вы не имеете доступа к списку учителей.';
 	}
@@ -37,30 +37,37 @@ class TableTeachers extends Table
 	{
 
 		switch($row_param) {
-			case 'Имя пользователя' :
-			case 'Привязанный пользователь WP' : 
-				return $item;
 			case 'Предметы' :
 				$list = '';
 				foreach($teacher->subjects as $subject) {
 					$list.= licey_subject_translate($subject) . ', ';
 				}
 				return substr($list, 0, strlen($list) - 2);
+			case 'Удалить' :
+				return '';
+			default : 
+				return $item;
 		}
 	}
 
 	protected function content_edit_filter($row_param, $teacher, $item)
 	{
 		switch($row_param) {
+			case 'Полное имя' :
+				return array(
+					'before' => "<input type='text' class='input-fio' name='teacher-fio[" . $teacher->username . "]' value='", 
+					'value' => $teacher->fio,
+					'after' => "'>"
+				);
 			case 'Имя пользователя' : 
 				return array(
-					'before' => "<input type='text' name='teacher-username[" . $teacher->username . "]' value='", 
+					'before' => "<input type='text' class='input-username' name='teacher-username[" . $teacher->username . "]' value='", 
 					'value' => $teacher->username,
 					'after' => "'>"
 				);
 
 			case 'Привязанный пользователь WP' : 
-				$list = "<select name='teacher-wp_user[" . $teacher->username . "]'>
+				$list = "<select class='input-wp_user' name='teacher-wp_user[" . $teacher->username . "]'>
 							<option value=''>--//--</option>
 				";
 				foreach(get_users() as $user) {
@@ -75,7 +82,7 @@ class TableTeachers extends Table
 				);
 
 			case 'Предметы' :
-				$list = "<select name='teacher-subjects[" . $teacher->username . "][]' multiple>";
+				$list = "<select class='input-subjects' name='teacher-subjects[" . $teacher->username . "][]' multiple>";
 				foreach(get_subjects_list() as $subject) {
 					$selected = ( in_array($subject, $teacher->subjects) ) ? ' selected' : '';
 					$list.= "<option value='" . $subject . "'". $selected . ">" . licey_subject_translate($subject) . "</option>";
@@ -86,15 +93,24 @@ class TableTeachers extends Table
 					'value' => $list,
 					'after' => ''
 				);
+			case 'Удалить' :
+				return array(
+					'before' => '',
+					'value' => "<a class='delete-teacher' href='" . licey_cur_uri() . "teacher-del=" . $teacher->id . "'>X</a>",
+					'after' => ''
+				);
 		}
 	}
+	
 
 	public function update() {
+		$fios = $_POST['teacher-fio'];
 		$usernames = $_POST['teacher-username'];
 		$wp_users = $_POST['teacher-wp_user'];
 		$subjects = $_POST['teacher-subjects'];
 
 		foreach($this->col_params as $teacher) {
+			$teacher->set_fio($fios[$teacher->username]);
 			$teacher->set_username($usernames[$teacher->username]);
 			$teacher->link_wp_user($wp_users[$teacher->username]);
 			$teacher->set_subjects($subjects[$teacher->username]);
@@ -102,6 +118,7 @@ class TableTeachers extends Table
 
 		$this->report = 'Данные учителей успешно сохранены';
 	}
+
 }
 
 ?>

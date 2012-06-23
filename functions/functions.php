@@ -17,8 +17,8 @@ function licey_get_study_year($date)
 /********* Функция перевода названия предмета *********/
 function licey_subject_translate($word)
 {
-	$eng = array("algebra", "geometry", "physics", "russian", "literature", "english", "inform", "chemistry", "biology", "geography", "history", "sociology", "economy", "fizra", "drawing", "bashkort", "obj");
-	$rus = array("Алгебра", "Геометрия", "Физика", "Русский язык", "Литература", "Английский язык", "Информатика", "Химия", "Биология", "География", "История", "Обществознание", "Экономика", "Физкультура", "Черчение", "Башкирский язык", "ОБЖ");
+	$eng = array("formmaster", "algebra", "geometry", "physics", "russian", "literature", "english", "inform", "chemistry", "biology", "geography", "history", "sociology", "economy", "fizra", "drawing", "bashkort", "obj");
+	$rus = array("Кл. рук.", "Алгебра", "Геометрия", "Физика", "Русский язык", "Литература", "Английский язык", "Информатика", "Химия", "Биология", "География", "История", "Обществознание", "Экономика", "Физкультура", "Черчение", "Башкирский язык", "ОБЖ");
 	
 	for($i=0; $i<count($eng); $i++) {
 		if($word === $eng[$i]) $word = $rus[$i];
@@ -117,15 +117,15 @@ function licey_get_dates($marks)
 function licey_transform_date($date)
 {
 	switch($date) {
-		case 'I_pol': $date = '<h3>I пол.</h3>'; break;
-		case 'II_pol': $date = '<h3>II пол.</h3>'; break;
-		case 'god': $date = '<h3>Год</h3>'; break;
-		case 'exam': $date = '<h3>Экзам.</h3>'; break;
-		case 'itog': $date = '<h3>Итог</h3>'; break;
+		case 'I_pol': $date = '<strong>I пол.</strong>'; break;
+		case 'II_pol': $date = '<strong>II пол.</strong>'; break;
+		case 'god': $date = '<strong>Год</strong>'; break;
+		case 'exam': $date = '<strong>Экзам.</strong>'; break;
+		case 'itog': $date = '<strong>Итог</strong>'; break;
 		case 'I': 
 		case 'II':
 		case 'III':
-		case 'IV': $date = '<h3>'.$date.'<h3>'; break;
+		case 'IV': $date = '<strong>'.$date.'<strong>'; break;
 		default: $date = substr($date, -2); break;
 	}
 	return $date;
@@ -196,6 +196,16 @@ function licey_update()
 		$student = new Student($id);
 		$student->delete();
 		$report = $student->report;
+	}
+
+	//удаление учителя 
+	if(isset($_REQUEST['teacher-del']))
+	{
+		$id = $_REQUEST['teacher-del'];
+		if(!is_numeric($id)) $id = $_REQUEST['teacher-id'];
+		$teacher = new Teacher($id);
+		$teacher->delete();
+		$report = $teacher->report;
 	}
 
 	//обновление ученика
@@ -356,14 +366,17 @@ function licey_unpack($str)
 }
 
 function licey_cur_uri( $query = true ) {
-	$sign = ($_SERVER['REQUEST_URI'])? "&amp;" : "?";
+	$request = $_SERVER['REQUEST_URI'];
+	if(strpos($request, 'updated=true')) $request = substr($request, 0, strlen($request) - 13);
+	$sign = ($request)? "&amp;" : "?";
 	if(!$query) $sign = '';
-	return "http://". $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'] . $sign;
+	return "http://". $_SERVER['HTTP_HOST'] . $request . $sign;
 }
 
-function get_subjects_list() {
+function get_subjects_list($formmaster = false) {
 	global $wpdb, $table_subjects;
-	return array_splice(array_keys( $wpdb->get_row("SELECT * FROM `".$table_subjects."`;", ARRAY_A) ), 3);
+	$splice = ( $formmaster )? 2 : 3;
+	return array_splice(array_keys( $wpdb->get_row("SELECT * FROM `".$table_subjects."`;", ARRAY_A) ), $splice);
 }
 function get_current_student() {
 	$current_user = wp_get_current_user();
@@ -385,5 +398,25 @@ function get_current_teacher() {
 	if(!$student->id) return false;
 
 	return $student;
+}
+
+function get_forms_list() {
+	global $wpdb, $table_subjects;
+	$forms = $wpdb->get_col("SELECT form FROM $table_subjects;");
+	usort($forms, 'licey_sort_forms');
+
+	return $forms;
+}
+
+function get_teachers() {
+	global $wpdb, $table_teachers;
+
+	$ids = $wpdb->get_col("SELECT id, fio FROM $table_teachers ORDER BY fio;");
+	$teachers = array();
+
+	foreach($ids as $id) {
+		$teachers[] = new Teacher($id);
+	}
+	return $teachers;
 }
 ?>

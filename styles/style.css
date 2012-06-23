@@ -1,0 +1,29 @@
+/*<Таблица оценок>*/
+.licey_show_marks_table {
+	font-family: "Helvetica", "Arial", sans-serif;
+	font-size: 10pt;
+	border-collapse: collapse;
+}
+
+.licey_show_marks_table td {
+	border: 1px solid #D7D7D7;
+	padding: 5px !important;
+	text-align: center;
+	min-width: 30px;
+}
+
+.licey_show_marks_table tr:first-of-type {
+	background-color: #eee !important;
+}
+
+.licey_show_marks_table tr:nth-child(odd) {
+	background-color: #F5F5F5;
+}
+.licey_show_marks_table td:first-of-type {
+	font-size: 12pt;
+	text-align: left;
+}
+
+.licey_show_marks_table span {
+	font-weight: bold;
+}
