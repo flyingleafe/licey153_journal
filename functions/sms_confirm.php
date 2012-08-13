@@ -19,3 +19,4 @@ function sms_validate($secret) {
 	session_start();
 	return ($secret === $_SESSION['sms_validation_secret']);
 }
+

@@ -419,4 +419,18 @@ function get_teachers() {
 	}
 	return $teachers;
 }
+
+function get_students($form = '') {
+	global $wpdb, $table_students;
+
+	if(!$form) $q = "SELECT id FROM $table_students;";
+	else $q = $wpdb->prepare("SELECT id, form FROM %s WHERE 'form'=%s", $table_students, $form);
+
+	$ids = $wpdb->get_col($q);
+	$students = array();
+
+	foreach($ids as $id) $students[] = new Student($id);
+
+	return $students;
+}
 ?>
