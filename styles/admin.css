@@ -80,7 +80,7 @@ span#updated {
 
 /* </Таблица оценок> */
 
-/*<Таблица классов>*/
+/*<Таблица расписания>*/
 .licey_edit_schedule_table {
 	font-family: "Helvetica", "Arial", sans-serif;
 	font-size: 8pt;
@@ -97,6 +97,69 @@ span#updated {
 	text-align: center;
 	min-width: 30px;
 }
+
+/*</Таблица расписания>*/
+
+/*<Таблица классов>*/
+.licey_edit_sched_table {
+        font-family: 'Segoe UI', Arial, sans-serif;
+}
+
+.licey_edit_sched_table h1 {
+        display: inline;
+}
+
+.licey_edit_sched_table form {
+        float: right;
+}
+
+.licey_sched_table div, .licey_edit_sched_table div {
+        position: relative;
+        width: 340px;
+        border-left: 4px solid #013b75;
+        padding: 5px 5px 5px 25px;
+    min-height: 250px;
+    display: -moz-inline-stack;
+    display: inline-block;
+    vertical-align: top;
+    margin: 5px;
+    zoom: 1;
+    *display: inline;
+    _height: 250px;
+}
+
+.licey_edit_sched_table div.hover {
+        background: #eee;
+}
+
+.licey_sched_table li, .licey_edit_sched_table li {
+        padding: 5px 0 5px 0;
+}
+
+.licey_edit_sched_table input[type="checkbox"] {
+        position: absolute;
+        left: 3px;
+        display: inline;
+}
+
+.js .licey_edit_sched_table input[type="checkbox"],
+.js .licey_edit_sched_table form {
+        display: none;
+}
+
+.licey_edit_sched_table li {
+        position: relative;
+        padding-left: 23px;
+}
+
+.licey_edit_sched_table li form {
+        margin-top: -5px;
+}
+
+.licey_edit_sched_table li.hover {
+        background-color: #abc;
+}
+
 
 /*</Таблица классов>*/
 
