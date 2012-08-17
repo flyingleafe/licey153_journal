@@ -53,14 +53,7 @@ function licey_journal_options()
 		$c++;
 	}
 	
-	echo "<input type='submit' name='canicular_dates_btn' value='Сохранить' class='button-primary'></form>";
-	
-	echo "<h2>Настройки отображения.</h2><form name='edit_strings' method='post' action='".$_SERVER['PHP_SELF']."?page=main-options&amp;updated=true'>";
-	if(function_exists('wp_nonce_field')) wp_nonce_field('edit_strings');
-	
-	echo "Ключ для отображения журнала по предметам и классам: <input type='text' name='edit_subj-form_hook' value='".get_option('licey_subj-form_replace_string')."'><br>";
-	echo "Ключ для отображения оценок отдельного ученика: <input type='text' name='edit_singlestud_hook' value='".get_option('licey_single-stud_replace_string')."'><br>";
-	echo "<input type='submit' name='edit_strings_btn' value='Сохранить' class='button-primary'></form>";
+	echo "<input type='submit' name='canicular_dates_btn' value='Сохранить' class='button-primary'></form>";$
 
 	$pages = get_pages();
 	?>

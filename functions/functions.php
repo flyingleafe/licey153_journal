@@ -147,7 +147,7 @@ function __mark($mark)
 function licey_update()
 {
 	//инфа о ДБ
-	global $wpdb, $table_marks, $table_students, $table_schedule, $table_subjects;
+	global $wpdb;
 	
 	$report = "Изменения сохранены";
 	$stop = false;
@@ -289,7 +289,7 @@ function licey_update()
  */
 function licey_getStudyDates($params)
 {
-	global $wpdb, $table_schedule;
+	global $wpdb;
 
 	$default = array('month' => date('n'), 'subject' => '', 'form' => '10В' );
 
@@ -299,7 +299,7 @@ function licey_getStudyDates($params)
 
 	$canicular_dates = $dates = json_decode( get_option('licey_canicular_dates'), true);
 
-	$days = $wpdb->get_row("SELECT * FROM `" . $table_schedule . "` WHERE form='" . $form . "';", ARRAY_A);
+	$days = $wpdb->get_row("SELECT * FROM `" . JOURNAL_DB_SCHEDULE . "` WHERE form='" . $form . "';", ARRAY_A);
 
 	if($subject) {
 		foreach($days as $day => $subjects) {
@@ -374,9 +374,9 @@ function licey_cur_uri( $query = true ) {
 }
 
 function get_subjects_list($formmaster = false) {
-	global $wpdb, $table_subjects;
+	global $wpdb;
 	$splice = ( $formmaster )? 2 : 3;
-	return array_splice(array_keys( $wpdb->get_row("SELECT * FROM `".$table_subjects."`;", ARRAY_A) ), $splice);
+	return array_splice(array_keys( $wpdb->get_row("SELECT * FROM `".JOURNAL_DB_SUBJECTS."`;", ARRAY_A) ), $splice);
 }
 function get_current_student() {
 	$current_user = wp_get_current_user();
@@ -401,17 +401,17 @@ function get_current_teacher() {
 }
 
 function get_forms_list() {
-	global $wpdb, $table_subjects;
-	$forms = $wpdb->get_col("SELECT form FROM $table_subjects;");
+	global $wpdb;
+	$forms = $wpdb->get_col("SELECT form FROM ".JOURNAL_DB_SUBJECTS.";");
 	usort($forms, 'licey_sort_forms');
 
 	return $forms;
 }
 
 function get_teachers() {
-	global $wpdb, $table_teachers;
+	global $wpdb;
 
-	$ids = $wpdb->get_col("SELECT id, fio FROM $table_teachers ORDER BY fio;");
+	$ids = $wpdb->get_col("SELECT id, fio FROM ".JOURNAL_DB_TEACHERS." ORDER BY fio;");
 	$teachers = array();
 
 	foreach($ids as $id) {
@@ -421,10 +421,10 @@ function get_teachers() {
 }
 
 function get_students($form = '') {
-	global $wpdb, $table_students;
+	global $wpdb;
 
-	if(!$form) $q = "SELECT id FROM $table_students;";
-	else $q = $wpdb->prepare("SELECT id, form FROM %s WHERE 'form'=%s", $table_students, $form);
+	if(!$form) $q = "SELECT id FROM ".JOURNAL_DB_STUDENTS.";";
+	else $q = $wpdb->prepare("SELECT id, form FROM %s WHERE 'form'=%s", JOURNAL_DB_STUDENTS, $form);
 
 	$ids = $wpdb->get_col($q);
 	$students = array();

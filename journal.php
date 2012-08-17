@@ -15,20 +15,20 @@ Author URI: http://burningweb.ru
 
 //Определение ДБ
 global $wpdb;
-$table_marks = $wpdb->prefix.liceyjournal_marks;
-$table_students = $wpdb->prefix.liceyjournal_students;
-$table_schedule = $wpdb->prefix.liceyjournal_schedule;
-$table_subjects = $wpdb->prefix.liceyjournal_subjects;
-$table_teachers = $wpdb->prefix.liceyjournal_teachers;
+define('JOURNAL_DB_MARKS', $wpdb->prefix.'liceyjournal_marks');
+define('JOURNAL_DB_STUDENTS', $wpdb->prefix.'liceyjournal_students');
+define('JOURNAL_DB_SCHEDULE', $wpdb->prefix.'liceyjournal_schedule');
+define('JOURNAL_DB_SUBJECTS', $wpdb->prefix.'liceyjournal_subjects');
+define('JOURNAL_DB_TEACHERS', $wpdb->prefix.'liceyjournal_teachers');
+
+//Определение путей
+define('JOURNAL_ROOT', WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__) ) );
 
 //Подключение файла функций
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'functions/functions.php');
-
-//Подключение классов
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'functions/classes.php');
+require_once JOURNAL_ROOT.'functions/functions.php';
 
 //Подключение виджета 
-require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'widget.php');
+require_once JOURNAL_ROOT.'widget.php';
 
 
 /**
@@ -38,18 +38,16 @@ require_once(WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basena
 function journal_install()
 {
 	//Подключаем установочный скрипт
-	$path = WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'install.php';
-	require_once($path);
+	require_once JOURNAL_ROOT.'install.php';
 }
 
 /**
  * Функция инициализации админ-меню
-**/
+ */
 function journal_admin_page() 
 {
 	//Добавляем страницу настроек
-	$main = WP_PLUGIN_DIR.'/'.str_replace(basename(__FILE__), "", plugin_basename(__FILE__)).'options.php';
-	require_once($main);
+	require_once JOURNAL_ROOT.'options.php';
 	add_menu_page('Онлайн-журнал', 'Журнал', 8, 'main-options', 'licey_journal_options');
 	//добавим субменю
 	//Эта строка закомментирована для того, чтобы в ближайшем будущем начать писать мастер установки журнала
@@ -63,6 +61,23 @@ function journal_admin_page()
 		add_submenu_page('main-options', 'Онлайн-журнал', 'Тестовая страница', 8, 'test', 'licey_test');
 	}
 }
+
+/**
+ * Автозагрузка PHP
+ * Автоматически подгружает необходимые классы по мере их надобности.
+ */
+function __journal_autoload_func($name) {
+	if(strpos($name, 'Table') !== false) {
+		$path = JOURNAL_ROOT."classes/table/class.$name.php";
+	} else $path = JOURNAL_ROOT."classes/class.$name.php";
+
+	if(file_exists($path)) require_once $path;
+}
+
+function journal_autoload() {
+	spl_autoload_register('__journal_autoload_func');
+}
+add_action('init', 'journal_autoload');
 
 function show_singlestudent_marks( $settings ) 
 {
@@ -103,6 +118,14 @@ function show_subjform_marks( $settings )
 	return $table->show(true);
 }
 
+/**
+ * Функция, выводящая вид журнала, соответствующий данному пользователю
+ *
+ */
+function journal_view( $settings ) {
+	
+}
+
 function licey_styles()
 {
 	echo "<link rel='stylesheet' type='text/css' href='" . plugins_url('styles/style.css', __FILE__) . "'>";
@@ -117,7 +140,7 @@ function licey_admin_styles_and_js()
 register_activation_hook(__FILE__, 'journal_install');
 add_shortcode('singlestudent', 'show_singlestudent_marks');
 add_shortcode('subj-form', 'show_subjform_marks');
-add_shortcode('licey_schedule', 'show_schedule');
+add_shortcode('licey-schedule', 'show_schedule');
 add_action('wp_head', 'licey_styles');
 add_action('admin_head', 'licey_admin_styles_and_js');
 add_action('admin_menu', 'journal_admin_page');

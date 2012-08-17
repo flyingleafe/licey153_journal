@@ -1,12 +1,4 @@
-<?php
-	
-global $wpdb;
-//определяем имена будущих таблиц
-$table_marks = $wpdb->prefix.liceyjournal_marks;
-$table_students = $wpdb->prefix.liceyjournal_students;
-$table_schedule = $wpdb->prefix.liceyjournal_schedule;
-$table_subjects = $wpdb->prefix.liceyjournal_subjects;
-$table_teachers = $wpdb->prefix.liceyjournal_teachers;
+<?php	
 
 /****определяем настройки*****/
 add_option('licey_completed_settings', false, '', 'yes');
@@ -30,20 +22,18 @@ add_option('licey_canicular_dates', json_encode( array(
 	)
 ) ), '', 'yes');
 
-add_option('licey_single-stud_replace_string', '[singlestudent]', '', 'yes');
-add_option('licey_subj-form_replace_string', '[subj-form]', '', 'yes');
-
 // Create post object
 $_p = array();
 $_p['post_title'] = '';
-$_p['post_content'] = "[singlestudent]";
+$_p['post_content'] = '';
 $_p['post_status'] = 'publish';
 $_p['post_type'] = 'page';
 $_p['comment_status'] = 'closed';
 $_p['ping_status'] = 'closed';
-$_p['post_category'] = array(1); // the default 'Uncatrgorised'
+$_p['post_category'] = array(1); // the default 'Uncategorised'
 
 $the_page_titles = array("Журнал ученика", "Журнал по классам", "Расписание");
+$the_page_contents = array('[singlestudent]', '[subj-form]', '[licey-schedule]')
 $the_pages = array();
 
 for($i=0; $i<3; $i++) {
@@ -77,7 +67,7 @@ add_option('licey_schedule_url', $the_pages[2]->guid);
 //таблица оценок
 $sql1 =
 "
-	CREATE TABLE IF NOT EXISTS `".$table_marks."` (
+	CREATE TABLE IF NOT EXISTS `".JOURNAL_DB_MARKS."` (
 	`id` int auto_increment,
 	`subject` varchar(16) not null,
 	`student` varchar(32) not null,
@@ -91,7 +81,7 @@ $wpdb->query($sql1);
 //таблица учеников
 $sql2 = 
 "
-	CREATE TABLE IF NOT EXISTS `".$table_students."` (
+	CREATE TABLE IF NOT EXISTS `".JOURNAL_DB_STUDENTS."` (
 	`id` int auto_increment,
 	`username` varchar(32) not null,
 	`student_name` varchar(60) not null,
@@ -107,7 +97,7 @@ $wpdb->query($sql2);
 //таблица расписания
 $sql3 = 
 "
-	CREATE TABLE IF NOT EXISTS `".$table_schedule."` (
+	CREATE TABLE IF NOT EXISTS `".JOURNAL_DB_SCHEDULE."` (
 	`id` int auto_increment,
 	`form` varchar(3) not null,
 	`mon` varchar(256) not null,
@@ -124,7 +114,7 @@ $wpdb->query($sql3);
 //таблица учителей по предметам
 $sql4 = 
 "
-	CREATE TABLE IF NOT EXISTS `".$table_subjects."` (
+	CREATE TABLE IF NOT EXISTS `".JOURNAL_DB_SUBJECTS."` (
 	`id` int auto_increment,
 	`form` varchar(3) not null,
 	`formmaster` varchar(256) not null,
@@ -152,7 +142,7 @@ $wpdb->query($sql4);
 //таблица учителей
 $sql5 = 
 "
-	CREATE TABLE IF NOT EXISTS `".$table_teachers."` (
+	CREATE TABLE IF NOT EXISTS `".JOURNAL_DB_TEACHERS."` (
 	`id` int auto_increment,
 	`username` varchar(32) not null,
 	`fio` varchar(60) not null,
