@@ -33,7 +33,7 @@ $_p['ping_status'] = 'closed';
 $_p['post_category'] = array(1); // the default 'Uncategorised'
 
 $the_page_titles = array("Журнал ученика", "Журнал по классам", "Расписание");
-$the_page_contents = array('[singlestudent]', '[subj-form]', '[licey-schedule]')
+$the_page_contents = array('[singlestudent]', '[subj-form]', '[licey-schedule]');
 $the_pages = array();
 
 for($i=0; $i<3; $i++) {
